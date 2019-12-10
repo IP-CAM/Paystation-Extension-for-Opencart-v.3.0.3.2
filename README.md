@@ -1,6 +1,6 @@
 # Paystation payment module for Opencart
 
-This integration is currently only tested up to Opencart 2.0.0
+This integration is currently only tested up to Opencart 3.0.3.2
 
 ## Requirements
 * An account with [Paystation](https://www2.paystation.co.nz/)
@@ -8,74 +8,66 @@ This integration is currently only tested up to Opencart 2.0.0
 
 ## Installation
 
-These instructions will guide you through installing the module and 
-conducting a test transaction. 
+These instructions will guide you through installing the module and conducting a test transaction.
 
-1. This module consists of the following files: 
+1. Download this plugin and rename the downloaded folder to `paystation.ocmod.zip`
 
-    catalog/controller/payment/paystation.php 
-    catalog/model/payment/paystation.php 
-    catalog/language/english/payment/paystation.php 
-    catalog/view/theme/default/template/payment/paystation.tpl 
-    admin/controller/payment/paystation.php 
-    admin/language/english/payment/paystation.php 
-    admin/view/template/payment/paystation.tpl 
-    admin/view/image/payment/paystation.png 
+2. Login to the admin panel of your Opencart website
 
-2. These files need to be copied to the corresponding directories in your Opencart installation. 
+3. Navigate to `Extensions -> Installer`
 
-3. Login to the admin pages of Opencart 
+4. Click on the upload button and upload this plugins zip folder
 
-4. Select Payments from the Extensions menu. 
+5. Wait until the progress bar changes color to green
 
-5. Find Paystation in the list of payment methods, and click the green 'Install' button in the 'Action' column. 
+6. You can now find our module under `Extensions -> Payments`
 
-6. The page will reload. This time click the blue 'Edit' button in the Action column for the Paystation method. 
+7. Find Paystation in the list of payment methods, and click the green `Install` button in the `Action` column.
 
-7. In the Paystation ID field, put your Paystation ID provided by Paystation. 
+8. The page will reload. This time click the blue `Edit` button in the Action column for the Paystation method.
 
-8. In the Paystation Gateway field, put the Gateway ID provided by Paystation. 
+9. In the Paystation ID field, put your Paystation ID provided by Paystation.
 
-9. In the HMAC field, put the HMAC key provided by Paystation.
+10. In the Paystation Gateway field, put the Gateway ID provided by Paystation.
 
-10. ‘Title in checkout’ is the text that will display next to the payment method in the checkout.
+11. In the HMAC field, put the HMAC key provided by Paystation.
 
-11. We strongly suggest setting 'Enable Postback' to 'Yes' as it will allow the cart to capture payment results even if your customers re-direct is interrupted. However, if your development/test environment is local or on a network that cannot receive connections from the internet, you must set 'Enable Postback' to 'No'.
+12. `Title in checkout` is the text that will display next to the payment method in the checkout.
 
-Your Paystation account needs to reflect your Opencart settings accurately, otherwise order status will not update correctly. Email support@paystation.co.nz with your Paystation ID and advise whether 'Enable Postback' is set to 'Yes' or 'No' in your Opencart settings. 
+13. We strongly suggest setting `Enable Postback` to `Yes` as it will allow the cart to capture payment results even if your customers re-direct is interrupted. However, if your development/test environment is local or on a network that cannot receive connections from the internet, you must set `Enable Postback` to `No`.
 
-12. In the Order Status, you may choose a status for orders with successful payments. 
+Your Paystation account needs to reflect your Opencart settings accurately, otherwise order status will not update correctly. Email support@paystation.co.nz with your Paystation ID and advise whether `Enable Postback` is set to `Yes` or `No` in your Opencart settings.
 
-13. Change the Status to Enabled. 
+14. In the Order Status, you may choose a status for orders with successful payments.
 
-14. Optionally, you may enter a number in the sort order field to change the order of 
-appearance of payment methods in the checkout. 
+15. Change the Status to Enabled.
 
-15. Optionally, select a Geo Zone. Refer to the Opencart documentation for details.
+16. Optionally, you may enter a number in the sort order field to change the order of appearance of payment methods in the checkout.
 
-16. Click the blue 'Save' button at the top-right of the page. 
+17. Optionally, select a Geo Zone. Refer to the Opencart documentation for details.
 
-17. The message “Success: You have modified Paystation three-party module details!” will appear.
+18. Click the blue `Save` button at the top-right of the page. 
 
-18. Go to your online store. 
+19. The message `Success: You have modified Paystation three-party module details!` will appear.
 
-19. To do a successful test transaction, make a purchase where the final 
+20. Go to your online store. 
+
+21. To do a successful test transaction, make a purchase where the final 
 cost will have the cent value set to .00, for example $1.00, this will 
 return a successful test transaction. To do an unsuccessful test transaction 
 make a purchase where the final cost will have the cent value set to 
 anything other than .00, for example $1.01-$1.99, this will return an 
 unsuccessful test transaction. 
 
-20. Important: You can only use the test Visa and Mastercards supplied by 
+22. Important: You can only use the test Visa and Mastercards supplied by 
 Paystation for test transactions. They can be found here https://www2.paystation.co.nz/developers/test-cards/.
 
-21. When you go to checkout - make sure you choose Paystation Payment Gateway in the Payment method section. 
+23. When you go to checkout - make sure you choose Paystation Payment Gateway in the Payment method section. 
 
-22. If everything works ok, go back to the 'Payment Methods' page, find the 
-Paystation module, and click the Configure link. 
+24. If everything works ok, go back to the `Payment Methods` page, find the Paystation module, and click the Configure link. 
 
-23. Change the mode from 'Test' to 'Live', and click the Update button 
+25. Change the mode from `Test` to `Live` and click the Update button 
 
-24. Fill in the form found on https://www2.paystation.co.nz/golive so that Paystation can test and set your account into Production Mode. 
+26. Fill in the form found on https://www2.paystation.co.nz/golive so that Paystation can test and set your account into Production Mode. 
 
-25. Congratulations - you can now process online credit card payments
+26. Congratulations - you can now process online credit card payments
