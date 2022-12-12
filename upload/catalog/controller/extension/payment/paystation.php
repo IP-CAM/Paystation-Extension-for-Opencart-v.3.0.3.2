@@ -121,7 +121,7 @@ class ControllerExtensionPaymentPaystation extends Controller
             $retarr[$outarr[$n][1]] = strip_tags($outarr[$n][0]);
             $n++;
         }
-        if ($retarr && isset($retarr['ec']) && isset($retarr['em']) && $retarr['ec'] !== 0) {
+        if ($retarr && isset($retarr['ec']) && isset($retarr['em']) && $retarr['ec'] !== '0') {
             $this->DisplayError($retarr['em']);
         }
         header("Location: " . $retarr['DigitalOrder']);
@@ -137,10 +137,10 @@ class ControllerExtensionPaymentPaystation extends Controller
         $paystationID = trim($this->config->get('payment_paystation_account'));
         $postback = ($this->config->get('payment_paystation_postback') == '1');
 
-        if ($this->request->get['ec'] == 0) {
+        if ($this->request->get['ec'] == '0') {
             $confirm = $this->transactionVerification($paystationID, $transactionID, $QL_amount, $QL_merchant_session,
                 $QL_EC);
-            if ((int)$confirm == 0 && ($QL_amount) == ($this->request->get['am']) && $this->request->get['ms'] == $QL_merchant_session) {
+            if ((int)$confirm == 0 && $this->request->get['ms'] == $QL_merchant_session) {
                 if (!$postback) {
                     // Successful order
                     $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_paystation_success_status_id'));
@@ -286,7 +286,7 @@ class ControllerExtensionPaymentPaystation extends Controller
         $xml = simplexml_load_string($xml);
 
         if (!empty($xml)) {
-            $errorCode = (int)$xml->ec;
+            $errorCode = $xml->ec;
             $errorMessage = $xml->em;
             $transactionId = $xml->ti;
             $cardType = $xml->ct;
@@ -327,7 +327,7 @@ class ControllerExtensionPaymentPaystation extends Controller
                 $paystationID = trim($this->config->get('payment_paystation_account'));
                 $confirm = $this->transactionVerification($paystationID, $transactionId, $QL_amount,
                     $QL_merchant_session, $QL_EC);
-                if ((int)$confirm == 0 && ($QL_amount) == ($amount) && $merchantSession == $QL_merchant_session) {
+                if ((int)$confirm == 0 && $merchantSession == $QL_merchant_session) {
                     // Successful order
                     $this->model_checkout_order->addOrderHistory($orderid, $this->config->get('payment_paystation_success_status_id'));
                 }
