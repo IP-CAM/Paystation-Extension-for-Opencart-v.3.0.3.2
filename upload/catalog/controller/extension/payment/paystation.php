@@ -67,8 +67,8 @@ class ControllerExtensionPaymentPaystation extends Controller
     private function initiate_paystation()
     {
         $retarr = null;
-        $returnURL = urlencode($this->url->link('extension/payment/paystation/returnURL'));
-        $postbackURL = urlencode($this->url->link('extension/payment/paystation/postback'));
+        $returnURL = urlencode($this->url->link('extension/payment/paystation/returnURL','',true));
+        $postbackURL = urlencode($this->url->link('extension/payment/paystation/postback','',true));
 
         $postback = ($this->config->get('payment_paystation_postback') == '1');
 
