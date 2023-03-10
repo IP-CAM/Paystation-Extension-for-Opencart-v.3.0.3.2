@@ -129,18 +129,15 @@ class ControllerExtensionPaymentPaystation extends Controller
 
     public function returnURL()
     {
-        $QL_amount = '';
-        $QL_EC = '';
-        $QL_merchant_session = '';
         $this->load->model('checkout/order');
         $transactionID = $this->request->get['ti'];
         $paystationID = trim($this->config->get('payment_paystation_account'));
         $postback = ($this->config->get('payment_paystation_postback') == '1');
-
-        if ($this->request->get['ec'] == '0') {
-            $confirm = $this->transactionVerification($paystationID, $transactionID, $QL_amount, $QL_merchant_session,
-                $QL_EC);
-            if ((int)$confirm == 0 && $this->request->get['ms'] == $QL_merchant_session) {
+        $errorCode = $this->request->get['ec'];
+        $merchantSession = $this->request->get['ms'];
+        if ($errorCode == '0') {
+            $confirm = $this->transactionVerification($paystationID, $transactionID, $errorCode, $merchantSession);
+            if ($confirm === true) {
                 if (!$postback) {
                     // Successful order
                     $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_paystation_success_status_id'));
@@ -156,32 +153,17 @@ class ControllerExtensionPaymentPaystation extends Controller
         }
     }
 
-    private function transactionVerification($paystationID, $transactionID, &$QL_amount, &$QL_merchant_session, &$QL_EC)
+    private function transactionVerification($paystationID, $transactionID, $errorCode, $merchantSession)
     {
-        $transactionVerified = '';
+        $transactionVerified = false;
         $lookupXML = $this->quickLookup($paystationID, 'ti', $transactionID);
-
-        $p = xml_parser_create();
-        xml_parse_into_struct($p, $lookupXML, $vals, $tags);
-        xml_parser_free($p);
-        for ($i = 0; $i < count($vals); $i++) {
-            $key = $vals[$i];
-            $key = $key['tag'];
-            $val = $i;
-            if ($key == "PAYSTATIONERRORCODE") {
-                $transactionVerified = (int)$vals[$val]['value'];
-                $QL_EC = (int)$transactionVerified;
-                //echo "QL_EC: "; var_dump ($QL_EC);
-            } elseif ($key == "PURCHASEAMOUNT") { //19
-                $QL_amount = $vals[$val];
-                $QL_amount = $QL_amount ['value'];
-            } elseif ($key == "MERCHANTSESSION") { //15
-                $QL_merchant_session = $vals[$val]['value'];
-            } else {
-                continue;
-            }
-        }
-        return $transactionVerified;
+		$lookupXML = simplexml_load_string($lookupXML);
+		if (!empty($lookupXML){
+			$ec = $lookupXML->PaystationErrorCode;
+			$ms = $lookupXML->MerchantSession;
+			if (($errorCode == $ec) && ($merchantSession == $ms)) $transactionVerified = true;
+		}
+		return $transactionVerified;
     }
 
     private function quickLookup($pi, $type, $value)
@@ -210,17 +192,6 @@ class ControllerExtensionPaymentPaystation extends Controller
         $result = curl_exec($ch);
         curl_close($ch);
 
-        return $result;
-    }
-
-    private function parseCode($mvalues)
-    {
-        $result = '';
-        for ($i = 0; $i < count($mvalues); $i++) {
-            if (!strcmp($mvalues[$i]["tag"], "QSIRESPONSECODE") && isset($mvalues[$i]["value"])) {
-                $result = $mvalues[$i]["value"];
-            }
-        }
         return $result;
     }
 
@@ -320,14 +291,10 @@ class ControllerExtensionPaymentPaystation extends Controller
             if ($orderid == "test-mode" && $xpl[1] != 'test-mode') {
                 $orderid = null;
             }
-            if ($errorCode == 0) {
-                $QL_amount = '';
-                $QL_EC = '';
-                $QL_merchant_session = '';
+            if ($errorCode == '0') {
                 $paystationID = trim($this->config->get('payment_paystation_account'));
-                $confirm = $this->transactionVerification($paystationID, $transactionId, $QL_amount,
-                    $QL_merchant_session, $QL_EC);
-                if ((int)$confirm == 0 && $merchantSession == $QL_merchant_session) {
+                $confirm = $this->transactionVerification($paystationID, $transactionId, $errorCode, $merchantSession);
+                if ($confirm === true) {
                     // Successful order
                     $this->model_checkout_order->addOrderHistory($orderid, $this->config->get('payment_paystation_success_status_id'));
                 }
