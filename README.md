@@ -1,6 +1,6 @@
 # Paystation payment module for Opencart
 
-This integration is currently only tested up to Opencart 3.0.3.2
+This integration is currently only tested up to Opencart 3.0.3.8
 
 ## Requirements
 * An account with [Paystation](https://www2.paystation.co.nz/)
