@@ -256,13 +256,13 @@ class ControllerExtensionPaymentPaystation extends Controller
         $xml = file_get_contents('php://input');
         $xml = simplexml_load_string($xml);
         if (!empty($xml)) {
-            $errorCode = $xml->ec;
+            $errorCode = (string)$xml->ec;
             $errorMessage = $xml->em;
             $transactionId = $xml->ti;
             $cardType = $xml->ct;
             $merchantReference = $xml->merchant_ref;
             $testMode = $xml->tm;
-            $merchantSession = $xml->MerchantSession;
+            $merchantSession = (string)$xml->MerchantSession;
             $usedAcquirerMerchantId = $xml->UsedAcquirerMerchantID;
             $amount = $xml->PurchaseAmount; // Note this is in cents
             $transactionTime = $xml->TransactionTime;
