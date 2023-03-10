@@ -255,7 +255,7 @@ class ControllerExtensionPaymentPaystation extends Controller
         $this->load->model('checkout/order');
         $xml = file_get_contents('php://input');
         $xml = simplexml_load_string($xml);
-
+	$xml = $xml->PaystationPaymentVerification;
         if (!empty($xml)) {
             $errorCode = $xml->ec;
             $errorMessage = $xml->em;
