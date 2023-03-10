@@ -158,7 +158,7 @@ class ControllerExtensionPaymentPaystation extends Controller
         $transactionVerified = false;
         $lookupXML = $this->quickLookup($paystationID, 'ti', $transactionID);
 		$lookupXML = simplexml_load_string($lookupXML);
-		if (!empty($lookupXML){
+		if (!empty($lookupXML)){
 			$ec = $lookupXML->PaystationErrorCode;
 			$ms = $lookupXML->MerchantSession;
 			if (($errorCode == $ec) && ($merchantSession == $ms)) $transactionVerified = true;
