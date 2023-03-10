@@ -117,7 +117,7 @@ class ControllerExtensionPaymentPaystation extends Controller
         $initiationResult = $this->directTransaction($paystationURL, $paystationParams);
 	$initiationResultXML  = simplexml_load_string($initiationResult);
 	if (!empty($initiationResultXML)) {
-		if (isset($initiationResultXML->ec) && $initiationResultXML->ec !== '0') {
+		if (isset($initiationResultXML->ec) && $initiationResultXML->ec != '0') {
 			$this->DisplayError($initiationResultXML->em);
 		} else {
 			header("Location: " . $initiationResultXML->DigitalOrder);
