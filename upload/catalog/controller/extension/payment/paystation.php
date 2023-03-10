@@ -115,16 +115,16 @@ class ControllerExtensionPaymentPaystation extends Controller
         $paystationURL .= $hmacGetParams;
 
         $initiationResult = $this->directTransaction($paystationURL, $paystationParams);
-        preg_match_all("/<(.*?)>(.*?)\</", $initiationResult, $outarr, PREG_SET_ORDER);
-        $n = 0;
-        while (isset($outarr[$n])) {
-            $retarr[$outarr[$n][1]] = strip_tags($outarr[$n][0]);
-            $n++;
-        }
-        if ($retarr && isset($retarr['ec']) && isset($retarr['em']) && $retarr['ec'] !== '0') {
-            $this->DisplayError($retarr['em']);
-        }
-        header("Location: " . $retarr['DigitalOrder']);
+	$initiationResultXML  = simplexml_load_string($initiationResult);
+	if (!empty($initiationResultXML)) {
+		if (isset($initiationResultXML->ec) && $initiationResultXML->ec !== '0') {
+			$this->DisplayError($initiationResultXML->em);
+		} else {
+			header("Location: " . $initiationResultXML->DigitalOrder);
+		}
+	} else {
+		$this->DisplayError("Error communicating with Paystation");
+	}
     }
 
     public function returnURL()
